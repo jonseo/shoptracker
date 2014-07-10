@@ -1,0 +1,22 @@
+<ion-view title="{{shop.name}}">
+  <ion-content class="has-header padding">
+  	<button class="button button-full button-calm" ng-click="showMapAll()">
+  		Ucitaj sve na mapu
+	</button>
+   	<div class="card" ng-repeat="shop in shops | orderBy:name">
+  		<div class="item item-divider">
+    		{{shop.name}} {{shop.type}}  
+    		<div class="button-card">
+	    		<button class="button button-small button-assertive" ng-click="showMapOne(shop.lat,shop.lang)" >
+	  				Mapa
+				</button>
+			</div>
+  		</div>
+  		<div class="item item-text-wrap">
+    		<div>Adresa: {{shop.address}}</div>
+    		<div>Radno vreme: {{shop.time}}</div>
+    		<div>Tel: {{shop.tel}}</div>
+  		</div>
+	</div>
+  </ion-content>
+</ion-view>

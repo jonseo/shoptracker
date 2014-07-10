@@ -1,0 +1,11 @@
+
+<div class="bar bar-header">
+  <div class="button-bar">
+	  <a class="button icon ion-loop button-positive" ng-click="refresh()"></a>
+	  <!-- <a class="button icon ion-model-s button-positive" ng-click="drivingMode()"></a> -->
+	  <a class="button icon {{mode}} button-positive" ng-click="changeMode()"></a>
+	  <a class="button icon ion-ios7-search-strong button-positive" ng-click="showSearch()"></a>
+	</div>
+</div>
+<div class="map" google-map></div>
+<input id="pac-input" class="controls" type="text" ng-show="show" placeholder="Nije moguce lociranje, unesite lokaciju...">

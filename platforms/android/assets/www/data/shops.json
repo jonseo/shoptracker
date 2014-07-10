@@ -1,0 +1,14 @@
+{
+    "shops": [
+        {
+            "id": "0",
+            "name": "Knjizare",
+            "icon": "ion-ios7-bookmarks"
+        },
+        {
+            "id": "1",
+            "name": "McDonalds restorani",
+            "icon": "ion-fork"
+        }
+    ]
+}
