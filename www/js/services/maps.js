@@ -1,94 +1,99 @@
 'use strict';
 
 angular.module('starter')
-  .service('maps', function ($rootScope,$stateParams, MapOptions) {
-    //globalna promenjiva self, koja vraca map objekat na kraju
-    var self = this;
+.service('maps', function ($rootScope,$stateParams, MapOptions) {
+  // Global variable self, return map object 
+  var self = this;
 
-    // Create a Google Maps object, but don't attach it to any visible element on the page. This
-    // object will only be used for calculating directions or similar, not for displaying a map to
-    // the user.
-    this.map = new google.maps.Map(document.createElement('div'), MapOptions);
-    this.directionsService = new google.maps.DirectionsService();
+  // Create a Google Maps object, but don't attach it to any visible element on the page. This
+  // object will only be used for calculating directions or similar, not for displaying a map to
+  // the user.
+  this.map = new google.maps.Map(document.createElement('div'), MapOptions);
+  this.directionsService = new google.maps.DirectionsService();
 
-    this.directions = {};
+  this.directions = {};
 
-    /**
-     * Get directions between two points from the Google Maps API.
-     * 
-     * @param {string} origin The start location from which to calculate directions
-     * @param {string} destination The end location to which to calculate directions
-     */
-    this.getDirections = function(origin , destination) {
-      var mod = 'DRIVING';
-      if($stateParams.travelID == 0){
-         mod = 'DRIVING';
-       }
-       if($stateParams.travelID == 1){
-        mod = 'WALKING';
-       }
-      
-      var request = {
-        origin: origin,
-        destination: destination,
-        travelMode: google.maps.TravelMode[mod]
-      };
+  /**
+   * Get directions between two points from the Google Maps API.
+   * 
+   * @param {string} origin The start location from which to calculate directions
+   * @param {string} destination The end location to which to calculate directions
+   */
+   this.getDirections = function(origin , destination) {
+    var mod = 'DRIVING';
+    if($stateParams.travelID == 0){
+      mod = 'DRIVING';
+    }
+    if($stateParams.travelID == 1){
+      mod = 'WALKING';
+    }
 
-      this.directionsService.route(request, function(result, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          self.directions = result;
-          $rootScope.$broadcast('maps.directions');
-        }
-      });
+    var request = {
+      origin: origin,
+      destination: destination,
+      travelMode: google.maps.TravelMode[mod]
     };
 
-    //funkcija koja postavlja markere na mapu
-    this.setMarkers = function(id,coords,marker){
-           var myLocation = {
-             latitude: coords.latitude,
-             longitude: coords.longitude,
-             succeed: coords.succeed
-           }
+    this.directionsService.route(request, function(result, status) {
+       if (status == google.maps.DirectionsStatus.OK) {
+          self.directions = result;
+          // Sharing data between service and directive
+          $rootScope.$broadcast('maps.directions');
+        }
+    });
+  };
 
-           var send = {};
-          
-          if(id > -1 ){
-            if(id == 0){
-              send = knjizare;
-            }
+  // Set markers on map
+  // If id equals -1 set only one shop marker
+  // else set all shop markers
+  // '$rootScope.$broadcast' send data to directive
+  this.setMarkers = function(id,coords,marker){
+     var myLocation = {
+       latitude: coords.latitude,
+       longitude: coords.longitude,
+       succeed: coords.succeed
+     }
 
-            if(id == 1){
-              send = fastfoods;
-            }
-            if(id == 2){
-              send = clothesShop;
-             }
+     var send = {};
 
-          }else{
-            send = marker;
-            $rootScope.$broadcast('one',send);
-          }
-          $rootScope.$broadcast('loc',myLocation);
-          $rootScope.$broadcast('all',send);
+     if(id > -1 ){
+      if(id == 0){
+        send = knjizare;
+      }
 
+      if(id == 1){
+        send = fastfoods;
+      }
+      if(id == 2){
+        send = clothesShop;
+      }
 
-    }
-    
-    //vraca detalje za odabranu grupu
+     }else{
+        send = marker;
+        // Send one marker to directive if we choose
+        // only one shop to show on map
+        $rootScope.$broadcast('one',send);
+     }
+     // Send my location to directive
+     $rootScope.$broadcast('loc',myLocation);
+     // Send all shops locations to directive
+     $rootScope.$broadcast('all',send);
+  }
+
+    // return details for selected group of shops
     this.getDetiles = function(id){
-        if(id == 0){
-          return knjizare;
-        }
-        if(id == 1){
-          return fastfoods;
-        }
-        if(id == 2){
-          return clothesShop;
-        }
+      if(id == 0){
+        return knjizare;
+      }
+      if(id == 1){
+        return fastfoods;
+      }
+      if(id == 2){
+        return clothesShop;
+      }
     }
-      //podaci koji se koriste na mapi, trenutno se nalaze ovde, 
-      //ali u pravoj verziji aplikacije bili bi smesteni na serveru
-     var fastfoods = [
+      // Some fake testing data
+      var fastfoods = [
       {
         id:1,
         name: 'McDonallds' ,
@@ -99,30 +104,30 @@ angular.module('starter')
         lang: 20.4613334
       },
 
-     {
-      id:2,
-      name: 'Caribic' ,
-      address: 'Brace Jugovica 21',
-      time: '00-24',
-      tel: '011/ 334 9960',
-      lat: 44.818082,
-      lang: 20.4607138
-    },
+      {
+        id:2,
+        name: 'Caribic' ,
+        address: 'Brace Jugovica 21',
+        time: '00-24',
+        tel: '011/ 334 9960',
+        lat: 44.818082,
+        lang: 20.4607138
+      },
 
-    {
+      {
 
-      id:3,
-      name: 'Big pizza',
-      address: 'Brace Jugovica 25',
-      time: '00-24',
-      tel: '066/411411',
-      lat: 44.818083,
-      lang: 20.4607138
-    }
-                    
-  ]
+        id:3,
+        name: 'Big pizza',
+        address: 'Brace Jugovica 25',
+        time: '00-24',
+        tel: '066/411411',
+        lat: 44.818083,
+        lang: 20.4607138
+      }
 
-    var knjizare = [
+      ]
+
+      var knjizare = [
       {
         id: 1,
         name: 'Laguna',
@@ -164,37 +169,37 @@ angular.module('starter')
         lat: 44.8495 ,
         lang: 20.383868
       }
-  ]
+      ]
 
-  var clothesShop = [
-    {
-      id:1,
-      name: 'Zara',
-      address: 'Knez Mihailova 5',
-      time: '10-22',
-      tel: '011/2023400',
-      lat: 44.815882,
-      lang: 20.4592081
-    },
-    {
-      id:2,
-      name: 'Alexandar 13',
-      address: 'Terazije 14',
-      time: '09-20',
-      tel: '011/3069782',
-      lat: 44.8126192,
-      lang: 20.4613334
-    },
-    {
-      id:3,
-      name: 'Mango',
-      address: 'Knez Mihailova 8',
-      time: '09-21',
-      tel:'011/303 2350',
-      lat: 44.815883,
-      lang: 20.4592081
-    }
-  ]
+      var clothesShop = [
+      {
+        id:1,
+        name: 'Zara',
+        address: 'Knez Mihailova 5',
+        time: '10-22',
+        tel: '011/2023400',
+        lat: 44.815882,
+        lang: 20.4592081
+      },
+      {
+        id:2,
+        name: 'Alexandar 13',
+        address: 'Terazije 14',
+        time: '09-20',
+        tel: '011/3069782',
+        lat: 44.8126192,
+        lang: 20.4613334
+      },
+      {
+        id:3,
+        name: 'Mango',
+        address: 'Knez Mihailova 8',
+        time: '09-21',
+        tel:'011/303 2350',
+        lat: 44.815883,
+        lang: 20.4592081
+      }
+      ]
 
-  return this;
-  });
+      return this;
+    });
