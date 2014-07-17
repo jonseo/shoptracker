@@ -41,7 +41,7 @@ angular.module('starter')
       SearchFunc();
       if(data.succeed == 1){
         var input = document.getElementById('pac-input');
-        input.placeholder='Changer location eg. \'Trg Republike, Belgrade\'';
+        input.placeholder='Change location eg. \'Trg Republike, Belgrade\'';
         myPosition =  new google.maps.LatLng(data.latitude, data.longitude);
         new google.maps.Marker({
           position: myPosition,
