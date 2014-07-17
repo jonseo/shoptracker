@@ -1,3 +1,9 @@
+ShopTracker
+=====================
+  “ShopTracker” is a mobile application, developed in HTML,CSS,JavaScript supported by Google Maps API, 
+which search shops and finds the best path to a shop from your location. Shops are located in Belgrade, Serbia.
+
+
 Ionic App Base
 =====================
 
